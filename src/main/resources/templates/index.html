@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kendo Grid</title>
+    <base href="https://demos.telerik.com/kendo-vue-ui/wrappers/grid/index"/>
+    <style>html {
+        font-size: 14px;
+        font-family: Arial, Helvetica, sans-serif;
+    }</style>
+    <title></title>
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2017.3.1018/styles/kendo.common-material.min.css"/>
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2017.3.1018/styles/kendo.material.min.css"/>
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2017.3.1018/styles/kendo.material.mobile.min.css"/>
+
+    <script src="https://kendo.cdn.telerik.com/2017.3.1018/js/jquery.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2017.3.1018/js/kendo.all.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.6.15/browser-polyfill.min.js"></script>
+    <script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+    <script src="https://unpkg.com/@progress/kendo-all-vue-wrapper/dist/cdn/kendo-all-vue-wrapper.min.js"></script>
+
+</head>
+
+
+<body>
+<div id="example">
+    <div id="app">
+        <kendo-datasource ref="datasource1"
+                          :transport-read-url="'http://localhost:8080/read'"
+                          :transport-read-data-type="'json'"
+                          :transport-update-url="'http://localhost:8080/update'"
+                          :transport-update-data-type="'json'"
+                          :transport-destroy-url="'http://localhost:8080/destroy'"
+                          :transport-destroy-data-type="'json'"
+                          :transport-create-url="'http://localhost:8080/create'"
+                          :transport-create-data-type="'json'"
+                          :transport-parameter-map="parameterMap"
+                          :schema-model-id="'id'"
+                          :schema-model-fields="schemaModelFields"
+                          :batch='true'
+                          :page-size='40'>
+        </kendo-datasource>
+        <kendo-grid :height="550"
+                    :width="550"
+                    :data-source-ref="'datasource1'"
+                    :pageable='true'
+                    :editable="'inline'"
+                    :toolbar="['create']">
+            <kendo-grid-column field="name" :width="120"></kendo-grid-column>
+            <kendo-grid-column field="username" :width="120"></kendo-grid-column>
+            <kendo-grid-column :command="['edit', 'destroy']" title="&nbsp;" width="250px"></kendo-grid-column>
+        </kendo-grid>
+    </div>
+</div>
+<script>
+
+    /*<![CDATA[*/
+    new Vue({
+        el: '#app',
+        data: {
+            schemaModelFields: {
+                id: {editable: false, nullable: true},
+                name: {validation: {required: true}},
+                username: {validation: {required: true}}
+            }
+        },
+        methods: {
+            parameterMap: function (options, operation) {
+                if (operation !== 'read' && options.models) {
+                    return {models: kendo.stringify(options.models)}
+                }
+            }
+        }
+    })
+    /*]]>*/
+</script>
+
+</body>
+</html>
